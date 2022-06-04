@@ -52,14 +52,15 @@ Booze = {
 
 ### List of Routes
 
-| Action | Method | Path           | Action                                                               |
-| ------ | ------ | -------------- | -------------------------------------------------------------------- |
-| login  | GET    | `/engineers`   | Read information about all engineers                                 |
-| create | POST   | `/engineers`   | Create a new engineer                                                |
-| show   | GET    | `/engineers/1` | Read information about the engineer whose ID is 1                    |
-| update | PUT    | `/engineers/1` | Update the existing engineer whose ID is 1 with all new content      |
-| update | PATCH  | `/engineers/1` | Update the existing engineer whose ID is 1 with partially new content|
-| destroy| DELETE | `/engineers/1` | Delete the existing engineer whose ID is 1                           |
+| Action | Method | Path                    | Action                                                               |
+| ------ | ------ | ----------------------- | -------------------------------------------------------------------- |
+| INDEX  | GET    | `/drinks`               | Read information about all recipes                                   |
+| NEW    | GET    | `/drinks/new`           | Show form to make new or copied recipe                               |
+| CREATE | POST   | `/drinks`               | Create a new recipe                                                  |
+| SHOW   | GET    | `/drinks/:drinkId`      | Read information about the recipe                                    |
+| EDIT   | GET    | `/drinks/:drinkId/edit` | Show existing form for existing recipe                               |
+| UPDATE | PUT    | `/drinks/:drinkId`      | Update the existing recipe with new content                          |
+| DESTROY| DELETE | `/drinks/:drinkId`      | Delete the existing recipe, then redirect                            |
 
 ### User stories
   - User will be able to create a login
