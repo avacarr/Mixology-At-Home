@@ -1,0 +1,41 @@
+
+<% if(!recipe) { %>
+    <select id="types">
+        <option selected >Filter by</option>
+        <% types.sort((a, b) => a.localeCompare(b)).forEach((el) => { %>
+        <option><%= el %> </option>
+        <% }) %> 
+    </select>
+<% } %>
+<ul class="list scroll1">
+    <% if(!recipe) { %>
+        <% allIngredients.sort((a, b) => a.name.localeCompare(b.name)).forEach((el) => { %>
+            <li id="<%= el.type %>"><% if (el.imageUrl != "") { %>
+                <img src="<%= el.imageUrl %>"  style="display:block;margin-left:auto;margin-right:auto;width:8vw;height:12vh;">
+            <% } else { %>
+                <img src="https://www.pngkit.com/png/full/10-108755_question-mark-png-question-mark-gray-clipart.png" style="display:block;margin-left:auto;margin-right:auto;width:8vw;height:12vh;">
+            <% } %>
+            <a href="/user/ingredients/<%= el._id %>"><%= el.name %></a>
+            </li>
+        <% }) %>
+    <% } else {%>
+        <% cocktails.sort((a, b) => a.name.localeCompare(b.name)).forEach((el) => { %>
+                <li style="text-align: center;"><a id="row" href="/user/cocktails/<%= el._id %>"><%= el.name %><br><%= el.description %></a>
+                </li>
+            <% }) %>
+    <% } %>
+</ul>
+
+
+<script>
+    document.getElementById('types').addEventListener('change', function(event) {
+        document.querySelectorAll('li').forEach((el) => {
+                el.style.display = ""
+            })
+        if (event.target.value != "Filter by") {
+            document.querySelectorAll('li').forEach((el) => {
+                if (el.id != event.target.value && el.id != "") {el.style.display = "none"}
+            })
+        }
+    })
+</script>

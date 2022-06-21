@@ -1,0 +1,10 @@
+
+<% if (!recipe) { %>
+    <form action="/user/ingredients" method="POST">
+        <%- include('../formIngredient') %>
+    </form>                    
+<% } else { %>
+    <form action="/user/cocktails" method="POST">
+        <%- include('../formRecipe') %>
+    </form>     
+<% } %> 

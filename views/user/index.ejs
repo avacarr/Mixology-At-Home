@@ -1,0 +1,128 @@
+
+
+<h2 style="text-align: center;margin-top:5vh;">Welcome <%= user.username %></h2>
+<div class="columns">
+
+    <div style="position: relative" class="favorites">
+
+        <h2 style="text-align: center">Favorites</h2>
+        <div class="favoritesIn" style="position: absolute; top: 15px; right: 10px;">
+            <label for="checkbox">Show All/Modify</label>
+            <input id="favorites" type="checkbox">
+        </div>
+        
+        <div class="remove_favorites">
+            <% favorites.sort((a, b) => a.name.localeCompare(b.name)).forEach((el) => { %>
+                <% if (user.favorites.includes(el._id)) { %>
+                    <li style="list-style-type: none;"><a href="/user/cocktails/<%= el._id %>"><%= el.name %></a></li>
+                <% } %> 
+            <% }) %>
+        </div>
+        <div class="add_favorites" style="display:none;">
+            <ul id="favorites" class="scroll2">
+                <form method="POST" action="/user">
+                    <input class="favoritesOut" type="submit" style="display:none; position: absolute; top: 15px; right: 10px;" value="Click Here To Enter!">
+                <% recipes.sort((a, b) => a.name.localeCompare(b.name)).forEach((el, index) => { %> 
+                    <% if (!favorites.map(function(test){return test.name}).includes(el.name)) { %> 
+                        <li style="list-style-type: none;"><input type="button" class="grey" id='favorites<%= index %>'_id="<%= el._id %>" value="<%= el.name %>"></li>
+                    <% } else { %> 
+                        <li style="list-style-type: none;">
+                            <input type="button" class="grey" id='favorites<%= index %>' value="<%= el.name %>" name="<% el._id %> " _id="<%= el._id %>" style="background-color: rgba(34, 155, 54, 0.5);">
+                            <input type="text" value="<%= el._id %>" name="favorites" style="display: none;">
+                        </li>
+                    <% } %> 
+                <% }) %>
+                <input type="text" value="" name="favorites" style="display: none;">
+                <div id="out_favorites" style="display:none"></div>
+                </form>
+            </ul>
+        </div>
+    </div>
+            
+
+
+
+
+    <div style="position: relative" class="available">
+        <h2 style="text-align: center">Available</h2>
+        <div class="availableIn" style="position: absolute; top: 15px; right: 10px;">
+            <label for="checkbox">Show All/Modify</label>
+            <input id="available" type="checkbox">
+        </div>       
+        <div class="remove_available">
+            <ul id="available" class="scroll2">
+            <% available.sort((a, b) => a.name.localeCompare(b.name)).forEach((el) => { %>
+                <% if (user.available.includes(el._id)) { %> 
+                <li><a href="/user/ingredients/<%= el._id %>"><%= el.name %></a></li>
+                <% } %> 
+            <% }) %>
+        </div>
+        <div class="add_available" style="display:none;">
+            <ul id="available" class="scroll2">
+                <form method="POST" action="/user">
+                    <input class="availableOut" type="submit" style="display:none; position: absolute; top: 15px; right: 10px;" value="Click Here To Enter!">
+                <% all.sort((a, b) => a.name.localeCompare(b.name)).forEach((el, index) => { %> 
+                    <% if (!available.map(function(test){return test.name}).includes(el.name)) { %> 
+                        <li style="list-style-type: none;"><input type="button" class="grey" id='available<%= index %>' _id="<%= el._id %>" value="<%= el.name %>"></li>
+                    <% } else { %> 
+                        <li style="list-style-type: none;">
+                            <input type="button" class="grey" id='available<%= index %>' value="<%= el.name %>" name="<% el._id %> " _id="<%= el._id %>" style="background-color: rgba(34, 155, 54, 0.5);">
+                            <input type="text" value="<%= el._id %>" name="available" style="display: none;">
+                        </li>
+                    <% } %> 
+                <% }) %>
+                <input type="text" value="" name="available" style="display: none;">
+                <div id="out_available" style="display:none"></div>
+                </form>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="recommened">
+        <h2 style="text-align: center">Recommended</h2>
+        <ul class="scroll2">
+            <% recommended.sort((a, b) => a.name.localeCompare(b.name)).forEach((el) => { %>
+                <li><a href="/user/cocktails/<%= el._id %>"><%= el.name %></a></li>
+            <% }) %>
+        </ul>
+    </div>
+</div>
+
+
+
+<script>
+
+    document.querySelectorAll('input').forEach((input) => {
+        input.addEventListener('change', function(event1) {
+        
+            document.querySelector('div.'+event1.target.id+'In').style.display = "none"
+            console.log('input.'+event1.target.id+'Out')
+            document.querySelector('input.'+event1.target.id+'Out').style.display = ""
+            document.querySelector('.remove_'+event1.target.id).style.display = "none"
+            document.querySelector('.add_'+event1.target.id).style.display = ""
+
+            document.querySelector('.add_'+event1.target.id).querySelectorAll("input[type=button]").forEach((el, index) => {
+                    el.addEventListener("click", function(event2) {
+                        if (document.getElementById(event1.target.id+index).hasAttribute("name")) {
+                            document.getElementById(event1.target.id+index).style.backgroundColor = 'rgba(111, 111, 111, 0.5)'
+                            document.getElementById(event1.target.id+index).removeAttribute("name")
+                            document.getElementById(event1.target.id+index).parentNode.removeChild(document.getElementById(event1.target.id+index).parentNode.lastElementChild)
+                        } else {
+                            document.getElementById(event1.target.id+index).style.backgroundColor = 'rgba(34, 155, 54, 0.5)'
+                            document.getElementById(event1.target.id+index).setAttribute("name", event2.target.getAttribute('_id'))
+                            
+                            var newText = document.createElement('input')
+                            newText.setAttribute('type', 'text')
+                            newText.setAttribute('value', event2.target.getAttribute('_id'))
+                            newText.setAttribute('name', event1.target.id)
+                            newText.style.display = 'none'
+                            document.getElementById(event1.target.id+index).parentNode.appendChild(newText)
+                        }
+                })
+            })
+        })
+    })
+
+</script>

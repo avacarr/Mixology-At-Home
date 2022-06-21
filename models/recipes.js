@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
-
-const logSchema = new mongoose.Schema({
-  title: String,
-  entry: String,
-  shipIsBroken: Boolean
+const {Schema} = mongoose;
   
-}, {timestamp: true});
+const recipesSchema = new mongoose.Schema({
+    name: String,
+    recipe: String,
+    description: String,
+    required: [{ name: String, amount: String }],
+    createdBy: String
 
-const Logs = mongoose.model('Logs', logSchema);
-module.exports = Logs
+  });
+
+const Recipes = mongoose.model('Recipes', recipesSchema);
+module.exports = Recipes

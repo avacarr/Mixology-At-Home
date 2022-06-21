@@ -1,0 +1,11 @@
+
+<input type="submit" value="Create New Ingredient!"><br>
+Name: <input name="name" type="text"><br>
+Type: <select name="type" type="text" list="type">
+    
+    <option selected disabled hidden>Choose Type of Ingredient</option> 
+    <% types.forEach((el) => { %>
+        <option><%= el %></option>
+    <% }) %>  
+</select><br>
+Image Url: <input name="imageUrl" type="text"><br>

@@ -1,0 +1,121 @@
+
+<% if(!recipe) { %>
+    <h1><%= item.name %></h1>
+    <h3><%= item.type %></h3>
+    <% if (item.imageUrl != "") { %>
+        <img src="<%= item.imageUrl %>" style="width:20vw;height:35vh;">
+    <% } else { %>
+        <img src="https://www.pngkit.com/png/full/10-108755_question-mark-png-question-mark-gray-clipart.png" style="width:20vw;height:35vh;">
+    <% } %> 
+
+    <form method="POST" action="/user/ingredients/<%= item._id %>?_method=PATCH">
+        <input type="submit" value="Enter Ingredient!"><br>
+        Name: <input name="name" type="text" value="<%= item.name %>"><br>
+        Type: <select name="type" type="text" list="type" value="<%= item.type %>">
+            
+        <% types.forEach((el) => { %>
+            <% if(item.type !== el) {%> 
+                <option><%= el %></option>
+            <% } else {%>
+                <option selected="selected"><%= el %></option>
+            <% } %>
+        <% }) %>  
+        </select>
+        <br>
+        Image Url: <input name="imageUrl" type="text" value="<%= item.imageUrl %>"><br>
+    </form>
+
+<% } else { %>
+
+    <h1><%= cocktail.name %></h1>
+    <h3><%= cocktail.description %></h3>
+
+    <form method="POST" action="/user/cocktails/<%= cocktail._id %>?_method=PATCH">
+        <input type="submit" value="Enter Cocktail!"><br>
+        Name: <input name="name" type="text" value="<%= cocktail.name %>"><br>
+        Description: <input name="description" type="text" value="<%= cocktail.description %>"><br>
+        Ingredients:
+
+        <input type="button" value="Add New Entry" onclick="add()">
+        <input type="button" value="Remove Last" onclick="remove()" style="background-color:rgba(255, 0, 0, 0.5);">
+        <div name="required" class="entry"></div>
+
+        <% cocktail.required.forEach((elS, i) => { %>
+            <select id="<%=i%>" name="name">
+            <% allIngredients.sort((a, b) => a.name.localeCompare(b.name)).forEach((elO) => { %>
+                <% if(elO.name !== elS.name) {%> 
+                    <option _id="<%=elO._id%>"><%=elO.name%></option>
+                <% } else {%>
+                    <option _id="<%=elO._id%>" selected><%=elO.name%></option>
+                <% } %>
+            <% }) %>
+            <input type="text" name="amount" value="<%=elS.amount%>"><br> 
+            </select>
+        <% }) %>
+        
+    </form>
+<% } %>
+
+<div class="options" style="display:none;">
+    <option disabled selected hidden>Choose your ingredients</option>
+    <% allIngredients.sort((a, b) => a.name.localeCompare(b.name)).forEach((el) => { %>
+        <option _id="<%=el._id%>"><%=el.name%></option>
+    <% }) %> 
+</div>
+
+<script>
+
+    function removeFromList() {
+        document.querySelectorAll('option').forEach((el) => {el.removeAttribute('disabled')})
+        document.querySelectorAll('select').forEach((elS, iS) => {
+            document.querySelectorAll('option').forEach((elO, iO) => {
+                if (elO.value === elS.value) {
+                    //if (iS != iO) {elO.setAttribute('disabled', 'disabled')}
+                }
+            })
+        })
+        //check(id)
+    }
+
+    function add() {
+        newId = (document.querySelector('.entry').querySelectorAll('select').length)
+
+        const newInput1 = document.createElement('select');
+        newInput1.name = 'name';
+        newInput1.id = newId;
+        newInput1.style.background = 'black';
+        const newInput2 = document.createElement('input');
+        newInput2.name = "amount";
+        newInput2.type = 'text';
+        newInput2.placeholder = 'Enter Amount'
+        var clone = document.querySelectorAll('.options option');
+
+        document.querySelector('.entry').appendChild(newInput1)
+        for (var i = 0; i < clone.length; i++) {
+            document.getElementById(newId).appendChild(clone[i].cloneNode(true))
+        }
+        document.querySelector('.entry').appendChild(newInput2)
+        document.querySelector('.entry').appendChild(document.createElement('br'));
+
+        document.getElementById(newId).addEventListener("change", function(event) {
+            removeFromList();
+        })
+    }
+
+    function remove() {
+        if(document.querySelector('.entry').childElementCount > 3) {
+            document.querySelector('.entry').removeChild(document.querySelector('.entry').lastElementChild)
+            document.querySelector('.entry').removeChild(document.querySelector('.entry').lastElementChild)
+            document.querySelector('.entry').removeChild(document.querySelector('.entry').lastElementChild)
+        }
+    }
+
+    if (document.getElementById(0) == null) {
+        add()
+    }
+    document.querySelectorAll('select').forEach((el, i) => {
+        document.getElementById(i).addEventListener("change", function(event) {
+            removeFromList();
+        })})
+    removeFromList()
+</script>
